@@ -33,14 +33,14 @@ export default async function AdminPage() {
         </p>
       ) : (
         <div className="mt-8 overflow-x-auto">
-          <table className="w-full min-w-160 text-left text-sm">
+          <table className="w-full text-left text-sm">
             <thead className="text-muted">
               <tr className="border-b border-line">
                 <th className="py-3 pr-4 font-normal">Título</th>
                 <th className="py-3 pr-4 font-normal">Área</th>
-                <th className="py-3 pr-4 font-normal">Nível</th>
+                <th className="hidden py-3 pr-4 font-normal sm:table-cell">Nível</th>
                 <th className="py-3 pr-4 font-normal">Status</th>
-                <th className="py-3 font-normal">Atualizado</th>
+                <th className="hidden py-3 font-normal sm:table-cell">Atualizado</th>
               </tr>
             </thead>
             <tbody>
@@ -55,7 +55,7 @@ export default async function AdminPage() {
                     </Link>
                   </td>
                   <td className="py-3 pr-4 text-muted">{area.name}</td>
-                  <td className="py-3 pr-4 text-muted">
+                  <td className="hidden py-3 pr-4 text-muted sm:table-cell">
                     {LEVEL_LABEL[h.level]}
                   </td>
                   <td className="py-3 pr-4">
@@ -70,7 +70,7 @@ export default async function AdminPage() {
                       <span className="text-muted">Rascunho</span>
                     )}
                   </td>
-                  <td className="py-3 text-muted">
+                  <td className="hidden py-3 text-muted sm:table-cell">
                     {h.updatedAt.toLocaleDateString("pt-BR")}
                   </td>
                 </tr>

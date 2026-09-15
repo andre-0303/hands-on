@@ -15,7 +15,7 @@ export default async function Home() {
 
   return (
     <>
-      <section className="mx-auto max-w-6xl px-5 pt-20 pb-16 sm:pt-28">
+      <section className="mx-auto max-w-6xl px-5 pt-14 pb-12 sm:pt-28 sm:pb-16">
         <h1 className="max-w-4xl font-display text-5xl leading-[0.95] font-bold tracking-tight sm:text-7xl lg:text-8xl">
           Menos tutorial, mais mão na massa.
         </h1>

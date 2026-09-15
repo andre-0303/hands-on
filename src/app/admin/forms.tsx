@@ -9,7 +9,7 @@ import { generate, remove, save, type FormState } from "./actions";
 type Area = { id: number; name: string };
 
 const field =
-  "mt-1.5 w-full rounded-md border border-line bg-panel px-3 py-2 text-fg placeholder:text-muted/60 focus:border-orange focus:outline-none";
+  "w-full rounded-md border border-line bg-panel px-3 py-2 text-fg placeholder:text-muted/60 focus:border-orange focus:outline-none";
 const primary =
   "rounded-md bg-orange px-5 py-2.5 font-medium text-ink hover:bg-orange-soft disabled:cursor-wait disabled:opacity-60";
 const secondary =
@@ -33,7 +33,7 @@ function Status({ state }: { state: FormState }) {
 function Label({ text, children }: { text: string; children: React.ReactNode }) {
   return (
     <label className="block text-sm">
-      <span className="text-muted">{text}</span>
+      <span className="mb-1.5 block text-muted">{text}</span>
       {children}
     </label>
   );
@@ -177,7 +177,7 @@ export function EditForm({
         </Label>
       </div>
       <Label text="Cenário (markdown)">
-        <textarea name="scenario" required rows={8} defaultValue={h.scenario} className={`${field} font-mono text-sm`} />
+        <textarea name="scenario" required rows={8} defaultValue={h.scenario} className={`${field} font-mono sm:text-sm`} />
       </Label>
 
       <fieldset className="space-y-6">
@@ -190,7 +190,7 @@ export function EditForm({
                 aria-label={`Título do passo ${i + 1}`}
                 value={s.title}
                 onChange={(e) => updateStep(i, "title", e.target.value)}
-                className={`${field} mt-0 font-medium`}
+                className={`${field} min-w-0 font-medium`}
               />
               <button
                 type="button"
@@ -214,7 +214,7 @@ export function EditForm({
                     rows={rows}
                     value={s[key]}
                     onChange={(e) => updateStep(i, key, e.target.value)}
-                    className={`${field} font-mono text-sm`}
+                    className={`${field} font-mono sm:text-sm`}
                   />
                 </Label>
               ))}

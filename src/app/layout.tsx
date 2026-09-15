@@ -24,7 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               hands on
             </Link>
             <nav className="text-sm text-muted">
-              <Link href="/#areas" className="hover:text-fg">
+              <Link href="/#areas" className="-m-2 inline-block p-2 hover:text-fg">
                 Áreas
               </Link>
             </nav>

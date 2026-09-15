@@ -46,7 +46,7 @@ export default async function AreaPage({ params, searchParams }: PageProps<"/[ar
               key={f.label}
               href={f.value ? `/${area.slug}?nivel=${f.value}` : `/${area.slug}`}
               aria-current={active ? "page" : undefined}
-              className={`rounded-full border px-4 py-1.5 text-sm ${
+              className={`rounded-full border px-4 py-2 text-sm ${
                 active ? "border-orange bg-orange text-ink" : "border-line text-muted hover:border-fg hover:text-fg"
               }`}
             >

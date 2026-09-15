@@ -27,9 +27,24 @@ export default async function HandsOnPage({ params }: PageProps<"/[area]/[slug]"
   if (!row) notFound();
   const { h, area } = row;
 
+  const stepLinks = (
+    <ol className="space-y-1 text-sm">
+      {h.steps.map((s, i) => (
+        <li key={i}>
+          <a href={`#passo-${i + 1}`} className="flex gap-3 py-2 text-muted hover:text-fg">
+            <span className="w-5 shrink-0 text-right text-orange tabular-nums">{i + 1}</span>
+            <span>
+              <InlineMarkdown>{stepTitle(s.title)}</InlineMarkdown>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  );
+
   return (
     <article className="mx-auto max-w-6xl px-5 pt-12 pb-24">
-      <Link href={`/${area.slug}`} className="text-sm text-muted hover:text-fg">
+      <Link href={`/${area.slug}`} className="-my-2 inline-block py-2 text-sm text-muted hover:text-fg">
         ← {area.name}
       </Link>
       <h1 className="mt-6 max-w-4xl font-display text-4xl leading-[1.05] font-bold tracking-tight sm:text-6xl">
@@ -39,7 +54,7 @@ export default async function HandsOnPage({ params }: PageProps<"/[area]/[slug]"
         <InlineMarkdown>{h.summary}</InlineMarkdown>
       </p>
 
-      <div className="mt-12 grid gap-12 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16">
+      <div className="mt-10 grid grid-cols-1 gap-10 lg:mt-12 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16">
         <aside className="lg:sticky lg:top-8 lg:self-start">
           <dl className="space-y-6 text-sm">
             <div>
@@ -73,24 +88,24 @@ export default async function HandsOnPage({ params }: PageProps<"/[area]/[slug]"
               </div>
             )}
           </dl>
-          <nav aria-label="Passos" className="mt-8 hidden border-t border-line pt-6 lg:block">
-            <ol className="space-y-2 text-sm">
-              {h.steps.map((s, i) => (
-                <li key={i}>
-                  <a href={`#passo-${i + 1}`} className="flex gap-3 text-muted hover:text-fg">
-                    <span className="w-4 text-right text-orange tabular-nums">{i + 1}</span>
-                    <span>
-                      <InlineMarkdown>{stepTitle(s.title)}</InlineMarkdown>
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ol>
+          <nav aria-label="Passos" className="mt-8 hidden border-t border-line pt-5 lg:block">
+            {stepLinks}
           </nav>
+          <details className="group mt-8 rounded-md border border-line lg:hidden">
+            <summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-3 text-sm font-medium select-none [&::-webkit-details-marker]:hidden">
+              <span aria-hidden className="inline-block transition-transform group-open:rotate-90">
+                ›
+              </span>
+              Ver os {h.steps.length} passos
+            </summary>
+            <nav aria-label="Passos" className="border-t border-line px-4 py-2">
+              {stepLinks}
+            </nav>
+          </details>
         </aside>
 
-        <div className="max-w-3xl">
-          <section aria-labelledby="cenario" className="rounded-lg border border-line bg-panel p-6 sm:p-8">
+        <div className="max-w-3xl min-w-0">
+          <section aria-labelledby="cenario" className="rounded-lg border border-line bg-panel p-5 sm:p-8">
             <h2 id="cenario" className="font-display text-2xl font-semibold">
               O cenário
             </h2>
@@ -99,17 +114,17 @@ export default async function HandsOnPage({ params }: PageProps<"/[area]/[slug]"
             </div>
           </section>
 
-          <ol className="mt-16 space-y-16">
+          <ol className="mt-14 space-y-14 sm:mt-16 sm:space-y-16">
             {h.steps.map((s, i) => (
               <li key={i} id={`passo-${i + 1}`} className="scroll-mt-8">
-                <div className="flex items-baseline gap-4">
+                <div className="flex items-baseline gap-3 sm:gap-4">
                   <span
                     aria-hidden
-                    className="font-display text-6xl leading-none font-bold text-orange tabular-nums sm:text-7xl"
+                    className="font-display text-5xl leading-none font-bold text-orange tabular-nums sm:text-7xl"
                   >
                     {i + 1}
                   </span>
-                  <h2 className="font-display text-2xl font-semibold tracking-tight">
+                  <h2 className="min-w-0 font-display text-xl font-semibold tracking-tight sm:text-2xl">
                     <span className="sr-only">Passo {i + 1}: </span>
                     <InlineMarkdown>{stepTitle(s.title)}</InlineMarkdown>
                   </h2>
