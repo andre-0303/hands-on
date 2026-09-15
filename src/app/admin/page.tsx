@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
-import { auth } from "@/auth";
+import { getAdmin } from "@/auth";
 import { db, areas, handsOns } from "@/db";
 import { LEVEL_LABEL } from "@/lib/handson";
 import { SignIn } from "./SignIn";
@@ -8,7 +8,7 @@ import { SignIn } from "./SignIn";
 export const metadata = { title: "Admin" };
 
 export default async function AdminPage() {
-  if (!(await auth())) return <SignIn />;
+  if (!(await getAdmin())) return <SignIn />;
 
   const rows = await db
     .select({ h: handsOns, area: areas })

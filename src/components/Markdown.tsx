@@ -5,6 +5,14 @@ export function Markdown({ children }: { children: string }) {
   return (
     <div className="md">
       <MarkdownAsync
+        // Conteúdo vem da IA: links externos sem repassar referrer nem SEO.
+        components={{
+          a: ({ href, title, children }) => (
+            <a href={href} title={title} rel="nofollow noopener noreferrer">
+              {children}
+            </a>
+          ),
+        }}
         rehypePlugins={[[rehypeShiki, { theme: "vesper", lazy: true, defaultLanguage: "text", fallbackLanguage: "text" }]]}
       >
         {children}

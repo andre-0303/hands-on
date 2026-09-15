@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getAdmin } from "@/auth";
 import { db, areas } from "@/db";
 import { SignIn } from "../SignIn";
 import { GenerateForm } from "../forms";
@@ -8,7 +8,7 @@ export const maxDuration = 300;
 export const metadata = { title: "Gerar hands on" };
 
 export default async function NovoPage() {
-  if (!(await auth())) return <SignIn />;
+  if (!(await getAdmin())) return <SignIn />;
   const list = await db.select().from(areas).orderBy(areas.id);
 
   return (

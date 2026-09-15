@@ -25,6 +25,8 @@ export async function generate(_: FormState, form: FormData): Promise<FormState>
   const level = String(form.get("level")) as Level;
   const notes = String(form.get("notes") ?? "").trim();
   if (!LEVELS.includes(level)) return { error: "Escolha um nível." };
+  if (!Number.isInteger(areaId)) return { error: "Área inválida." };
+  if (topic.length > 200 || notes.length > 2000) return { error: "Tema até 200 caracteres e observações até 2000." };
 
   const [area] = await db.select().from(areas).where(eq(areas.id, areaId));
   if (!area) return { error: "Área não encontrada." };
@@ -65,6 +67,10 @@ const lines = (v: FormDataEntryValue | null, sep: string | RegExp) =>
 
 export async function save(id: number, _: FormState, form: FormData): Promise<FormState> {
   await requireAdmin();
+  const areaId = Number(form.get("areaId"));
+  if (!Number.isInteger(id) || !Number.isInteger(areaId)) return { error: "Dados inválidos." };
+  const intent = form.get("intent") ?? "save"; // Enter sem botão = salvar
+  if (intent !== "save" && intent !== "publish" && intent !== "unpublish") return { error: "Ação inválida." };
   let steps: unknown;
   try {
     steps = JSON.parse(String(form.get("steps")));
@@ -84,7 +90,6 @@ export async function save(id: number, _: FormState, form: FormData): Promise<Fo
     return { error: parsed.error.issues.map((i) => `${i.path.join(".") || "campo"}: ${i.message}`).join("; ") };
   }
 
-  const intent = form.get("intent");
   const [current] = await db.select({ publishedAt: handsOns.publishedAt }).from(handsOns).where(eq(handsOns.id, id));
   if (!current) return { error: "Hands on não encontrado." };
 
@@ -92,7 +97,7 @@ export async function save(id: number, _: FormState, form: FormData): Promise<Fo
     .update(handsOns)
     .set({
       ...parsed.data,
-      areaId: Number(form.get("areaId")),
+      areaId,
       updatedAt: new Date(),
       ...(intent === "publish" && { status: "published", publishedAt: current.publishedAt ?? new Date() }),
       ...(intent === "unpublish" && { status: "draft" }),
@@ -105,6 +110,7 @@ export async function save(id: number, _: FormState, form: FormData): Promise<Fo
 
 export async function remove(id: number) {
   await requireAdmin();
+  if (!Number.isInteger(id)) throw new Error("Dados inválidos.");
   await db.delete(handsOns).where(eq(handsOns.id, id));
   revalidatePath("/", "layout");
   redirect("/admin");

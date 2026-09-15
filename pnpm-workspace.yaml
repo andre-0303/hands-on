@@ -1,3 +1,8 @@
 allowBuilds:
   esbuild: true
   unrs-resolver: true
+# Não instala versões publicadas há menos de 1 dia (janela típica de pacote malicioso ser removido).
+minimumReleaseAge: 1440
+# esbuild antigo só é usado pelo drizzle-kit (dev); advisory GHSA-67mh-4wv8-2f99.
+overrides:
+  "@esbuild-kit/core-utils>esbuild": "^0.25.0"

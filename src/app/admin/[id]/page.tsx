@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { eq } from "drizzle-orm";
-import { auth } from "@/auth";
+import { getAdmin } from "@/auth";
 import { db, areas, handsOns } from "@/db";
 import { SignIn } from "../SignIn";
 import { EditForm } from "../forms";
@@ -8,7 +8,7 @@ import { EditForm } from "../forms";
 export const metadata = { title: "Editar hands on" };
 
 export default async function EditPage({ params }: PageProps<"/admin/[id]">) {
-  if (!(await auth())) return <SignIn />;
+  if (!(await getAdmin())) return <SignIn />;
   const id = Number((await params).id);
   if (!Number.isInteger(id)) notFound();
 

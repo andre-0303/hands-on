@@ -8,24 +8,25 @@ export const LEVEL_LABEL: Record<Level, string> = {
   avancado: "Avançado",
 };
 
-const text = z.string().trim().min(1);
+// Limites generosos: evitam payloads gigantes vindos do form ou da IA.
+const text = (max: number) => z.string().trim().min(1).max(max);
 
 export const stepSchema = z.object({
-  title: text,
-  instructions: text,
-  hint: text,
-  solution: text,
+  title: text(200),
+  instructions: text(20_000),
+  hint: text(5_000),
+  solution: text(30_000),
 });
 export type Step = z.infer<typeof stepSchema>;
 
 export const handsOnSchema = z.object({
-  title: text,
-  summary: text,
+  title: text(200),
+  summary: text(1_000),
   level: z.enum(LEVELS),
-  scenario: text,
-  prerequisites: z.array(text),
-  tags: z.array(text),
-  steps: z.array(stepSchema).min(1),
+  scenario: text(20_000),
+  prerequisites: z.array(text(300)).max(20),
+  tags: z.array(text(60)).max(20),
+  steps: z.array(stepSchema).min(1).max(30),
 });
 export type HandsOnInput = z.infer<typeof handsOnSchema>;
 

@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { auth } from "@/auth";
+import { getAdmin } from "@/auth";
 import { logout } from "./actions";
 
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
-  const session = await auth();
+  const session = await getAdmin();
   return (
     <div className="mx-auto max-w-6xl px-5 pt-8 pb-24">
       {session && (
