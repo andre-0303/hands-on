@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hands On
 
-## Getting Started
+Projetos práticos por área (SQL, Software Engineering, Python, Front-end), com cenário, passo a passo, dica e gabarito. Os hands ons são gerados por IA (OpenRouter), revisados no `/admin` e publicados.
 
-First, run the development server:
+## Rodando local
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env   # preencha as variáveis
+pnpm db:push           # cria as tabelas no Neon (drizzle-kit lê DATABASE_URL do .env)
+pnpm db:seed           # cria as 4 áreas
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse `/admin`, entre com o GitHub definido em `ADMIN_GITHUB_LOGIN`, gere um hands on, revise e publique.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `pnpm test`: testes do parser e do schema do hands on
+- `pnpm build`: build de produção (precisa de `DATABASE_URL`, porque a home é pré-renderizada)
 
-## Learn More
+## Deploy (Vercel)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Importe o repositório, configure as mesmas variáveis do `.env` e crie outro OAuth App do GitHub com callback `https://SEU-DOMINIO/api/auth/callback/github`.
