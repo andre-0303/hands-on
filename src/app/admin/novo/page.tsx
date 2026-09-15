@@ -17,7 +17,7 @@ export default async function NovoPage() {
       <p className="mt-3 max-w-xl text-muted">
         A IA cria um rascunho com cenário, passos, dicas e gabarito. Sem tema, ela escolhe um que ainda não existe na área. Você revisa antes de publicar.
       </p>
-      <GenerateForm areas={list.map((a) => ({ id: a.id, name: a.name, topics: a.topics }))} />
+      <GenerateForm areas={list} />
     </>
   );
 }

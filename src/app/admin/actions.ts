@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { db, areas, handsOns } from "@/db";
 import { requireAdmin, signIn, signOut } from "@/auth";
 import { generateHandsOn } from "@/lib/generate";
@@ -90,16 +90,13 @@ export async function save(id: number, _: FormState, form: FormData): Promise<Fo
     return { error: parsed.error.issues.map((i) => `${i.path.join(".") || "campo"}: ${i.message}`).join("; ") };
   }
 
-  const [current] = await db.select({ publishedAt: handsOns.publishedAt }).from(handsOns).where(eq(handsOns.id, id));
-  if (!current) return { error: "Hands on não encontrado." };
-
   await db
     .update(handsOns)
     .set({
       ...parsed.data,
       areaId,
       updatedAt: new Date(),
-      ...(intent === "publish" && { status: "published", publishedAt: current.publishedAt ?? new Date() }),
+      ...(intent === "publish" && { status: "published", publishedAt: sql`coalesce(${handsOns.publishedAt}, now())` }),
       ...(intent === "unpublish" && { status: "draft" }),
     })
     .where(eq(handsOns.id, id));

@@ -98,9 +98,15 @@ export function GenerateForm({ areas }: { areas: (Area & { topics: string[] })[]
   );
 }
 
-type HandsOn = typeof handsOns.$inferSelect;
-
-export function EditForm({ handsOn: h, areas, publicUrl }: { handsOn: HandsOn; areas: Area[]; publicUrl: string }) {
+export function EditForm({
+  handsOn: h,
+  areas,
+  publicUrl,
+}: {
+  handsOn: typeof handsOns.$inferSelect;
+  areas: Area[];
+  publicUrl: string;
+}) {
   const [state, action, pending] = useActionState(save.bind(null, h.id), {});
   const [steps, setSteps] = useState<Step[]>(h.steps);
   const published = h.status === "published";
@@ -123,7 +129,15 @@ export function EditForm({ handsOn: h, areas, publicUrl }: { handsOn: HandsOn; a
             "Rascunho, visível só para você."
           )}
         </p>
-        <DeleteButton id={h.id} />
+        <button
+          type="button"
+          onClick={() => {
+            if (confirm("Excluir este hands on? Não dá para desfazer.")) startTransition(() => remove(h.id));
+          }}
+          className="text-sm text-muted hover:text-red-400"
+        >
+          Excluir
+        </button>
       </div>
 
       <input type="hidden" name="steps" value={JSON.stringify(steps)} />
@@ -232,19 +246,5 @@ export function EditForm({ handsOn: h, areas, publicUrl }: { handsOn: HandsOn; a
         <Status state={state} />
       </div>
     </form>
-  );
-}
-
-function DeleteButton({ id }: { id: number }) {
-  return (
-    <button
-      type="button"
-      onClick={() => {
-        if (confirm("Excluir este hands on? Não dá para desfazer.")) startTransition(() => remove(id));
-      }}
-      className="text-sm text-muted hover:text-red-400"
-    >
-      Excluir
-    </button>
   );
 }

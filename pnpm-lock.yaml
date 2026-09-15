@@ -35,9 +35,6 @@ importers:
       react-markdown:
         specifier: ^10.1.0
         version: 10.1.0(@types/react@19.3.0)(react@19.2.8)(supports-color@7.2.0)
-      shiki:
-        specifier: ^4.4.3
-        version: 4.4.3
       zod:
         specifier: ^4.6.5
         version: 4.6.5

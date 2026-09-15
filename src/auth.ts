@@ -28,7 +28,5 @@ export async function getAdmin() {
 
 // Server actions são endpoints POST públicos: toda action chama isto.
 export async function requireAdmin() {
-  const session = await getAdmin();
-  if (!session) throw new Error("Não autorizado.");
-  return session;
+  if (!(await getAdmin())) throw new Error("Não autorizado.");
 }

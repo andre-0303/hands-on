@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { Logo } from "@/components/Logo";
 
 export const ogSize = { width: 1200, height: 630 };
 
@@ -33,12 +34,7 @@ export async function renderOg({ title, detail, meta }: { title: string; detail?
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill={ORANGE}>
-            <rect x="3" y="1" width="6" height="11" rx="1" />
-            <rect x="3" y="13" width="6" height="10" rx="1" />
-            <path d="M11 7h7a3 3 0 0 1 3 3v2a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z" />
-            <rect x="15" y="14" width="6" height="9" rx="1" />
-          </svg>
+          <Logo width={48} height={48} fill={ORANGE} />
           <span style={{ fontFamily: "Bricolage Grotesque", fontSize: 36, letterSpacing: -1 }}>hands on</span>
         </div>
 

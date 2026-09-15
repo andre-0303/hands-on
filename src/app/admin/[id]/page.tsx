@@ -20,7 +20,7 @@ export default async function EditPage({ params }: PageProps<"/admin/[id]">) {
   return (
     <EditForm
       handsOn={h}
-      areas={list.map((a) => ({ id: a.id, name: a.name }))}
+      areas={list}
       publicUrl={`/${area.slug}/${h.slug}`}
     />
   );

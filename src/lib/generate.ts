@@ -39,7 +39,6 @@ async function chat(messages: Msg[]): Promise<string> {
       model: process.env.OPENROUTER_MODEL,
       messages,
       response_format: { type: "json_object" },
-      reasoning: { effort: "low" },
     }),
   });
   if (!res.ok) throw new Error(`OpenRouter respondeu ${res.status}: ${await res.text()}`);
