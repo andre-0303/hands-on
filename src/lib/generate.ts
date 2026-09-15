@@ -21,6 +21,7 @@ Responda SOMENTE com um objeto JSON, sem texto fora dele, neste formato:
 Regras:
 - Tudo em português do Brasil.
 - Todo código, em qualquer campo, fica dentro de bloco markdown cercado com a linguagem: \`\`\`sql ... \`\`\`. Nunca escreva código solto em "solution".
+- "title", "summary", "prerequisites", "tags" e "steps[].title" são texto puro: sem markdown (nada de *, ** ou crases) e sem numeração.
 - "tags": no máximo 6, só as mais relevantes.
 - "prerequisites": só o que a pessoa já precisa saber ANTES; não liste o que o hands on ensina.
 - Cenário, passos e gabarito devem ser coerentes entre si (mesmas tabelas, nomes e regras).`;

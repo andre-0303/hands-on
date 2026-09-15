@@ -46,3 +46,16 @@ export function slugify(s: string): string {
     .replace(/^-|-$/g, "")
     .slice(0, 60);
 }
+
+// Para <title>, imagem OG e outros lugares sem HTML.
+export function plainText(s: string): string {
+  return s
+    .replace(/`([^`]*)`/g, "$1")
+    .replace(/(\*\*|\*|~~)(\S(?:.*?\S)?)\1/g, "$2")
+    .replace(/(?<!\w)(__|_)(\S(?:.*?\S)?)\1(?!\w)/g, "$2"); // _ dentro de palavra (snake_case) não é ênfase
+}
+
+// A IA às vezes numera o título ("2. Criar tabela"), mas a página já mostra o número.
+export function stepTitle(s: string): string {
+  return s.replace(/^\s*(passo\s*)?\d+\s*[.):-]\s*/i, "");
+}

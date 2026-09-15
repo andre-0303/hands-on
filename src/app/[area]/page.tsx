@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { and, desc, eq } from "drizzle-orm";
 import { db, areas, handsOns } from "@/db";
 import { LEVELS, LEVEL_LABEL, type Level } from "@/lib/handson";
+import { InlineMarkdown } from "@/components/Markdown";
 
 async function getArea(slug: string) {
   const [area] = await db.select().from(areas).where(eq(areas.slug, slug));
@@ -74,9 +75,11 @@ export default async function AreaPage({ params, searchParams }: PageProps<"/[ar
               <Link href={`/${area.slug}/${h.slug}`} className="group block py-7">
                 <span className="text-sm text-orange-soft">{LEVEL_LABEL[h.level]}</span>
                 <span className="mt-1 block font-display text-2xl font-semibold tracking-tight group-hover:text-orange sm:text-3xl">
-                  {h.title}
+                  <InlineMarkdown>{h.title}</InlineMarkdown>
                 </span>
-                <span className="mt-2 block max-w-2xl text-muted">{h.summary}</span>
+                <span className="mt-2 block max-w-2xl text-muted">
+                  <InlineMarkdown>{h.summary}</InlineMarkdown>
+                </span>
                 {h.tags.length > 0 && (
                   <span className="mt-4 flex flex-wrap gap-1.5">
                     {h.tags.map((t) => (

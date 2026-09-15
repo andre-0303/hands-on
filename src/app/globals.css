@@ -64,7 +64,8 @@ body {
   padding-left: 1em;
   color: var(--color-muted);
 }
-.md :not(pre) > code {
+.md :not(pre) > code,
+.md-inline code {
   font-family: var(--font-mono);
   font-size: 0.88em;
   background: var(--color-panel);
@@ -81,6 +82,13 @@ body {
   border-radius: 6px;
   padding: 1em 1.1em;
   overflow-x: auto;
+}
+/* Shiki (tema vesper) pinta o fundo inline; manter o fundo do site */
+.md pre.shiki {
+  background-color: var(--color-panel) !important;
+}
+.md-inline strong {
+  font-weight: 600;
 }
 .md table {
   display: block;

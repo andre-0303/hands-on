@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { and, eq } from "drizzle-orm";
 import { db, areas, handsOns } from "@/db";
-import { LEVEL_LABEL } from "@/lib/handson";
-import { Markdown } from "@/components/Markdown";
+import { LEVEL_LABEL, plainText, stepTitle } from "@/lib/handson";
+import { InlineMarkdown, Markdown } from "@/components/Markdown";
 
 async function getHandsOn(areaSlug: string, slug: string) {
   const [row] = await db
@@ -18,7 +18,7 @@ async function getHandsOn(areaSlug: string, slug: string) {
 export async function generateMetadata({ params }: PageProps<"/[area]/[slug]">): Promise<Metadata> {
   const { area, slug } = await params;
   const row = await getHandsOn(area, slug);
-  return row ? { title: row.h.title, description: row.h.summary } : {};
+  return row ? { title: plainText(row.h.title), description: plainText(row.h.summary) } : {};
 }
 
 export default async function HandsOnPage({ params }: PageProps<"/[area]/[slug]">) {
@@ -33,9 +33,11 @@ export default async function HandsOnPage({ params }: PageProps<"/[area]/[slug]"
         ← {area.name}
       </Link>
       <h1 className="mt-6 max-w-4xl font-display text-4xl leading-[1.05] font-bold tracking-tight sm:text-6xl">
-        {h.title}
+        <InlineMarkdown>{h.title}</InlineMarkdown>
       </h1>
-      <p className="mt-5 max-w-2xl text-lg text-muted">{h.summary}</p>
+      <p className="mt-5 max-w-2xl text-lg text-muted">
+        <InlineMarkdown>{h.summary}</InlineMarkdown>
+      </p>
 
       <div className="mt-12 grid gap-12 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16">
         <aside className="lg:sticky lg:top-8 lg:self-start">
@@ -50,7 +52,9 @@ export default async function HandsOnPage({ params }: PageProps<"/[area]/[slug]"
                 <dd className="mt-1">
                   <ul className="space-y-1">
                     {h.prerequisites.map((p) => (
-                      <li key={p}>{p}</li>
+                      <li key={p}>
+                        <InlineMarkdown>{p}</InlineMarkdown>
+                      </li>
                     ))}
                   </ul>
                 </dd>
@@ -75,7 +79,9 @@ export default async function HandsOnPage({ params }: PageProps<"/[area]/[slug]"
                 <li key={i}>
                   <a href={`#passo-${i + 1}`} className="flex gap-3 text-muted hover:text-fg">
                     <span className="w-4 text-right text-orange tabular-nums">{i + 1}</span>
-                    <span>{s.title}</span>
+                    <span>
+                      <InlineMarkdown>{stepTitle(s.title)}</InlineMarkdown>
+                    </span>
                   </a>
                 </li>
               ))}
@@ -105,7 +111,7 @@ export default async function HandsOnPage({ params }: PageProps<"/[area]/[slug]"
                   </span>
                   <h2 className="font-display text-2xl font-semibold tracking-tight">
                     <span className="sr-only">Passo {i + 1}: </span>
-                    {s.title}
+                    <InlineMarkdown>{stepTitle(s.title)}</InlineMarkdown>
                   </h2>
                 </div>
                 <div className="mt-5">

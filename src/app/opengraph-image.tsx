@@ -6,7 +6,7 @@ export const contentType = "image/png";
 
 export default function Image() {
   return renderOg({
-    title: "Aprenda programação fazendo projeto.",
+    title: "Menos tutorial, mais mão na massa.",
     detail: "Cenário de empresa, passo a passo, dica e gabarito.",
     meta: ["SQL, Software Engineering, Python e Front-end"],
   });

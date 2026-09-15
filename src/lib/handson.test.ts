@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { parseAiJson, slugify, handsOnSchema } from "./handson.ts";
+import { parseAiJson, slugify, handsOnSchema, plainText, stepTitle } from "./handson.ts";
 
 const sample = {
   title: "Relatório de vendas",
@@ -44,4 +44,13 @@ test("prompt sem tema pede para a IA escolher e evita repetidos", async () => {
   const comTema = buildUserPrompt({ ...base, topic: "Views" });
   assert.match(comTema, /Tema: Views/);
   assert.doesNotMatch(comTema, /Temas sugeridos/);
+});
+
+test("plainText remove marcação inline e stepTitle remove numeração", () => {
+  assert.equal(plainText("Módulo com *retry* e **timeout** em `fetch`"), "Módulo com retry e timeout em fetch");
+  assert.equal(plainText("snake_case_name e 2 * 3"), "snake_case_name e 2 * 3");
+  assert.equal(stepTitle("2. Criar a tabela `produtos`"), "Criar a tabela `produtos`");
+  assert.equal(stepTitle("Passo 3: Popular dados"), "Popular dados");
+  assert.equal(stepTitle("10) Índices"), "Índices");
+  assert.equal(stepTitle("3 tabelas relacionadas"), "3 tabelas relacionadas");
 });

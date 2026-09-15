@@ -17,7 +17,7 @@ export default async function Home() {
     <>
       <section className="mx-auto max-w-6xl px-5 pt-20 pb-16 sm:pt-28">
         <h1 className="max-w-4xl font-display text-5xl leading-[0.95] font-bold tracking-tight sm:text-7xl lg:text-8xl">
-          Aprenda programação fazendo projetos.
+          Menos tutorial, mais mão na massa.
         </h1>
         <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted">
           Cada hands on parte de um problema de uma empresa fictícia e te guia

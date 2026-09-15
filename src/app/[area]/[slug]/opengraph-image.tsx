@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import { db, areas, handsOns } from "@/db";
-import { LEVEL_LABEL } from "@/lib/handson";
+import { LEVEL_LABEL, plainText } from "@/lib/handson";
 import { renderOg, ogSize } from "@/lib/og";
 
 export const alt = "Hands on";
@@ -16,5 +16,5 @@ export default async function Image({ params }: { params: Promise<{ area: string
     .where(and(eq(handsOns.slug, slug), eq(areas.slug, areaSlug), eq(handsOns.status, "published")));
 
   if (!row) return renderOg({ title: "Hands On" });
-  return renderOg({ title: row.title, detail: row.summary, meta: [row.area, LEVEL_LABEL[row.level]] });
+  return renderOg({ title: plainText(row.title), detail: plainText(row.summary), meta: [row.area, LEVEL_LABEL[row.level]] });
 }
