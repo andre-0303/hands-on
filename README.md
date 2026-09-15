@@ -145,3 +145,7 @@ src/
 - [ ] Login para estudantes e progresso por passo
 - [ ] Entrega do projeto com feedback por IA
 - [ ] Trilhas por área, com os temas já cobertos e os que faltam
+
+## Licença
+
+Distribuído sob a licença [MIT](LICENSE). Você pode usar, modificar e distribuir o código, desde que mantenha o aviso de copyright.
