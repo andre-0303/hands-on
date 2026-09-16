@@ -8,7 +8,13 @@ const bricolage = Bricolage_Grotesque({ variable: "--font-bricolage", subsets: [
 const instrument = Instrument_Sans({ variable: "--font-instrument", subsets: ["latin"] });
 const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"] });
 
+// Vercel define VERCEL_PROJECT_PRODUCTION_URL sozinha (sem protocolo); sem ela, dev local.
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: { default: "Hands On", template: "%s | Hands On" },
   description: "Projetos práticos por área para treinar programação: cenário real, passo a passo, dicas e gabarito.",
 };
