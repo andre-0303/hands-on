@@ -1,6 +1,8 @@
 import Link from "next/link";
-import { and, count, eq, getTableColumns } from "drizzle-orm";
+import { and, count, desc, eq, getTableColumns } from "drizzle-orm";
 import { db, areas, handsOns } from "@/db";
+import { LEVEL_LABEL } from "@/lib/handson";
+import { InlineMarkdown } from "@/components/Markdown";
 
 export default async function Home() {
   const rows = await db
@@ -12,6 +14,14 @@ export default async function Home() {
     )
     .groupBy(areas.id)
     .orderBy(areas.id);
+
+  const latest = await db
+    .select({ h: handsOns, area: areas })
+    .from(handsOns)
+    .innerJoin(areas, eq(areas.id, handsOns.areaId))
+    .where(eq(handsOns.status, "published"))
+    .orderBy(desc(handsOns.publishedAt))
+    .limit(3);
 
   return (
     <>
@@ -58,6 +68,32 @@ export default async function Home() {
           ))}
         </ul>
       </section>
+
+      {latest.length > 0 && (
+        <section aria-labelledby="ultimos" className="mx-auto max-w-6xl px-5 pb-24">
+          <h2 id="ultimos" className="font-display text-2xl font-semibold tracking-tight">
+            Publicados recentemente
+          </h2>
+          <ul className="mt-6 border-t border-line">
+            {latest.map(({ h, area }) => (
+              <li key={h.id} className="border-b border-line">
+                <Link href={`/${area.slug}/${h.slug}`} className="group block py-6">
+                  <span className="flex flex-wrap gap-x-3 text-sm">
+                    <span className="text-orange-soft">{area.name}</span>
+                    <span className="text-muted">{LEVEL_LABEL[h.level]}</span>
+                  </span>
+                  <span className="mt-1 block font-display text-xl font-semibold tracking-tight group-hover:text-orange sm:text-2xl">
+                    <InlineMarkdown>{h.title}</InlineMarkdown>
+                  </span>
+                  <span className="mt-2 block max-w-2xl text-muted">
+                    <InlineMarkdown>{h.summary}</InlineMarkdown>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </>
   );
 }

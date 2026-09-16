@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { startTransition, useActionState, useState, type FormEvent } from "react";
+import { startTransition, useActionState, useEffect, useState, type FormEvent } from "react";
 import type { handsOns } from "@/db/schema";
 import { LEVELS, LEVEL_LABEL, type Step } from "@/lib/handson";
 import { generate, remove, save, type FormState } from "./actions";
@@ -107,15 +107,29 @@ export function EditForm({
   areas: Area[];
   publicUrl: string;
 }) {
-  const [state, action, pending] = useActionState(save.bind(null, h.id), {});
   const [steps, setSteps] = useState<Step[]>(h.steps);
+  const [dirty, setDirty] = useState(false);
+  const [state, action, pending] = useActionState(async (prev: FormState, form: FormData) => {
+    const result = await save(h.id, prev, form);
+    setDirty(Boolean(result.error));
+    return result;
+  }, {} as FormState);
   const published = h.status === "published";
+
+  // Avisa ao fechar ou recarregar a aba; navegação interna o App Router não deixa interceptar.
+  useEffect(() => {
+    if (!dirty) return;
+    const warn = (e: BeforeUnloadEvent) => e.preventDefault();
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
+
 
   const updateStep = (i: number, key: keyof Step, value: string) =>
     setSteps((s) => s.map((step, j) => (j === i ? { ...step, [key]: value } : step)));
 
   return (
-    <form onSubmit={submitTo(action)} className="space-y-8">
+    <form onSubmit={submitTo(action)} onChange={() => setDirty(true)} className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <p className="text-sm text-muted">
           {published ? (
@@ -127,7 +141,15 @@ export function EditForm({
             </>
           ) : (
             "Rascunho, visível só para você."
-          )}
+          )}{" "}
+          <a
+            href={`/admin/${h.id}/preview`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-orange-soft underline underline-offset-4"
+          >
+            Ver como fica
+          </a>
         </p>
         <button
           type="button"
@@ -244,6 +266,7 @@ export function EditForm({
           </button>
         )}
         <Status state={state} />
+        {dirty && <span className="text-sm text-muted">Alterações não salvas</span>}
       </div>
     </form>
   );

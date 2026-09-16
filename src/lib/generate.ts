@@ -28,6 +28,9 @@ Regras:
 
 type Msg = { role: "system" | "user" | "assistant"; content: string };
 
+// Modelos free vivem sobrecarregados; se o primeiro devolver erro, o OpenRouter tenta o proximo.
+const FALLBACKS = ["z-ai/glm-5.2:free", "nvidia/nemotron-3-super-120b-a12b:free"];
+
 async function chat(messages: Msg[]): Promise<string> {
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
@@ -36,15 +39,16 @@ async function chat(messages: Msg[]): Promise<string> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: process.env.OPENROUTER_MODEL,
+      models: [...new Set([process.env.OPENROUTER_MODEL, ...FALLBACKS].filter(Boolean))],
       messages,
       response_format: { type: "json_object" },
     }),
   });
   if (!res.ok) throw new Error(`OpenRouter respondeu ${res.status}: ${await res.text()}`);
   const data = await res.json();
+  if (data.error) throw new Error(`OpenRouter: ${data.error.message}`);
   const content = data.choices?.[0]?.message?.content;
-  if (!content) throw new Error("OpenRouter não retornou conteúdo.");
+  if (!content) throw new Error(`OpenRouter não retornou conteúdo (finish_reason: ${data.choices?.[0]?.finish_reason}).`);
   return content;
 }
 
@@ -80,7 +84,14 @@ export async function generateHandsOn(input: GenerateInput): Promise<HandsOnInpu
 
   let lastError = "";
   for (let attempt = 0; attempt < 3; attempt++) {
-    const raw = await chat(messages);
+    let raw: string;
+    try {
+      raw = await chat(messages);
+    } catch (e) {
+      lastError = (e as Error).message;
+      await new Promise((r) => setTimeout(r, 5000 * (attempt + 1)));
+      continue;
+    }
     try {
       const parsed = handsOnSchema.safeParse(parseAiJson(raw));
       if (parsed.success) return parsed.data;

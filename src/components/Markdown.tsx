@@ -1,9 +1,10 @@
 import ReactMarkdown, { MarkdownAsync } from "react-markdown";
 import rehypeShiki from "@shikijs/rehype";
+import { CopyCode } from "@/components/CopyCode";
 
 export function Markdown({ children }: { children: string }) {
   return (
-    <div className="md">
+    <CopyCode>
       <MarkdownAsync
         // Conteúdo vem da IA: links externos sem repassar referrer nem SEO.
         components={{
@@ -17,7 +18,7 @@ export function Markdown({ children }: { children: string }) {
       >
         {children}
       </MarkdownAsync>
-    </div>
+    </CopyCode>
   );
 }
 
