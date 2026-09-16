@@ -29,7 +29,7 @@ Regras:
 type Msg = { role: "system" | "user" | "assistant"; content: string };
 
 // Modelos free vivem sobrecarregados; se o primeiro devolver erro, o OpenRouter tenta o proximo.
-const FALLBACKS = ["z-ai/glm-5.2:free", "nvidia/nemotron-3-super-120b-a12b:free"];
+const FALLBACKS = ["dots-studio/dots-3-note-preview:free", "z-ai/glm-5.2:free", "nvidia/nemotron-3-super-120b-a12b:free"];
 
 async function chat(messages: Msg[]): Promise<string> {
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
